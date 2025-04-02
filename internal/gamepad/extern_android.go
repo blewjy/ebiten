@@ -15,7 +15,7 @@
 package gamepad
 
 import (
-	"github.com/hajimehoshi/ebiten/v2/internal/gamepaddb"
+	"github.com/blewjy/ebiten/v2/internal/gamepaddb"
 )
 
 func AddAndroidGamepad(androidDeviceID int, name, sdlID string, axisCount, hatCount int) {

@@ -21,9 +21,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/internal/atlas"
-	"github.com/hajimehoshi/ebiten/v2/internal/buffered"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/internal/atlas"
+	"github.com/blewjy/ebiten/v2/internal/buffered"
 )
 
 var gameUpdateCh = make(chan func())

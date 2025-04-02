@@ -19,8 +19,8 @@ import (
 	"image"
 	"unsafe"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/graphics"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver"
+	"github.com/blewjy/ebiten/v2/internal/graphics"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver"
 )
 
 type image11 struct {

@@ -17,7 +17,7 @@ package graphicscommand
 import (
 	"context"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/thread"
+	"github.com/blewjy/ebiten/v2/internal/thread"
 )
 
 var theRenderThread thread.Thread = thread.NewNoopThread()

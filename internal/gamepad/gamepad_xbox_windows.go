@@ -20,7 +20,7 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/gamepaddb"
+	"github.com/blewjy/ebiten/v2/internal/gamepaddb"
 )
 
 func standardButtonToGamepadInputGamepadButton(b gamepaddb.StandardButton) (_GameInputGamepadButtons, bool) {

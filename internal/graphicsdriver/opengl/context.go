@@ -23,10 +23,10 @@ import (
 	"runtime"
 	"sync"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/opengl/gl"
-	"github.com/hajimehoshi/ebiten/v2/internal/shaderir"
-	"github.com/hajimehoshi/ebiten/v2/internal/shaderir/glsl"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver/opengl/gl"
+	"github.com/blewjy/ebiten/v2/internal/shaderir"
+	"github.com/blewjy/ebiten/v2/internal/shaderir/glsl"
 )
 
 type blendFactor int

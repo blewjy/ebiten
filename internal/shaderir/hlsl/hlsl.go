@@ -22,7 +22,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/shaderir"
+	"github.com/blewjy/ebiten/v2/internal/shaderir"
 )
 
 const (

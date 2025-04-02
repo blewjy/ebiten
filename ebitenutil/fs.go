@@ -18,7 +18,7 @@ import (
 	"image"
 	"io/fs"
 
-	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/blewjy/ebiten/v2"
 )
 
 // NewImageFromFileSystem create an image from the specified file system.

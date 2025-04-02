@@ -19,9 +19,9 @@ import (
 	"hash/crc32"
 	"unicode"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/gamepad"
-	"github.com/hajimehoshi/ebiten/v2/internal/gamepaddb"
-	"github.com/hajimehoshi/ebiten/v2/internal/ui"
+	"github.com/blewjy/ebiten/v2/internal/gamepad"
+	"github.com/blewjy/ebiten/v2/internal/gamepaddb"
+	"github.com/blewjy/ebiten/v2/internal/ui"
 )
 
 // https://developer.android.com/reference/android/view/KeyEvent

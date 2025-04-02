@@ -19,7 +19,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/blewjy/ebiten/v2"
 )
 
 // This test confirms that deallocation of a shader works correctly.

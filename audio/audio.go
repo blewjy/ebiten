@@ -41,8 +41,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/hajimehoshi/ebiten/v2/audio/internal/convert"
-	"github.com/hajimehoshi/ebiten/v2/internal/hook"
+	"github.com/blewjy/ebiten/v2/audio/internal/convert"
+	"github.com/blewjy/ebiten/v2/internal/hook"
 )
 
 const (

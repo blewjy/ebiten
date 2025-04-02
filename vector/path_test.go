@@ -17,7 +17,7 @@ package vector_test
 import (
 	"testing"
 
-	"github.com/hajimehoshi/ebiten/v2/vector"
+	"github.com/blewjy/ebiten/v2/vector"
 )
 
 func TestIsPointCloseToSegment(t *testing.T) {

@@ -18,9 +18,9 @@ import (
 	"image/color"
 	"testing"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	t "github.com/hajimehoshi/ebiten/v2/internal/testing"
-	"github.com/hajimehoshi/ebiten/v2/vector"
+	"github.com/blewjy/ebiten/v2"
+	t "github.com/blewjy/ebiten/v2/internal/testing"
+	"github.com/blewjy/ebiten/v2/vector"
 )
 
 func TestMain(m *testing.M) {

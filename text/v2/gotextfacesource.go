@@ -25,7 +25,7 @@ import (
 	"github.com/go-text/typesetting/shaping"
 	"golang.org/x/image/math/fixed"
 
-	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/blewjy/ebiten/v2"
 )
 
 type goTextOutputCacheKey struct {

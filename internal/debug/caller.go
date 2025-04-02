@@ -39,7 +39,7 @@ const (
 // FirstCaller returns the file and line number of the first caller outside of Ebitengine.
 func FirstCaller() (file string, line int, callerType CallerType) {
 	ebitengineFileDirOnce.Do(func() {
-		pkg, err := build.Default.Import("github.com/hajimehoshi/ebiten/v2", "", build.FindOnly)
+		pkg, err := build.Default.Import("github.com/blewjy/ebiten/v2", "", build.FindOnly)
 		if err != nil {
 			return
 		}

@@ -19,11 +19,11 @@ import (
 	"image"
 	"math"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/atlas"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphics"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver"
-	"github.com/hajimehoshi/ebiten/v2/internal/mipmap"
-	"github.com/hajimehoshi/ebiten/v2/internal/restorable"
+	"github.com/blewjy/ebiten/v2/internal/atlas"
+	"github.com/blewjy/ebiten/v2/internal/graphics"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver"
+	"github.com/blewjy/ebiten/v2/internal/mipmap"
+	"github.com/blewjy/ebiten/v2/internal/restorable"
 )
 
 // panicOnErrorOnReadingPixels indicates whether reading pixels panics on an error or not.

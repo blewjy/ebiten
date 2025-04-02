@@ -19,8 +19,8 @@ import (
 	"log"
 	"math/rand/v2"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/vector"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/vector"
 )
 
 const (

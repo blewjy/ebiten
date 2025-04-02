@@ -17,7 +17,7 @@ package graphicscommand
 import (
 	"image"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/graphics"
+	"github.com/blewjy/ebiten/v2/internal/graphics"
 )
 
 type WritePixelsCommandArgs = writePixelsCommandArgs

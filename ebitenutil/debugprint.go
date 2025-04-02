@@ -22,7 +22,7 @@ import (
 	"image"
 	_ "image/png"
 
-	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/blewjy/ebiten/v2"
 )
 
 //go:embed text.png

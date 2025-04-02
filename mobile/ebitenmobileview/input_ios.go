@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"unicode"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/ui"
+	"github.com/blewjy/ebiten/v2/internal/ui"
 )
 
 // #cgo CFLAGS: -x objective-c

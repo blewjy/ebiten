@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"runtime"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/ebitenutil"
 )
 
 type Game struct {

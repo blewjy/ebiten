@@ -24,9 +24,9 @@ import (
 
 	"github.com/ebitengine/debugui"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	resources "github.com/hajimehoshi/ebiten/v2/examples/resources/images/shader"
-	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"github.com/blewjy/ebiten/v2"
+	resources "github.com/blewjy/ebiten/v2/examples/resources/images/shader"
+	"github.com/blewjy/ebiten/v2/inpututil"
 )
 
 var (

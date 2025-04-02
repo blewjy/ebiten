@@ -15,9 +15,9 @@
 package ebiten
 
 import (
-	"github.com/hajimehoshi/ebiten/v2/internal/atlas"
-	"github.com/hajimehoshi/ebiten/v2/internal/builtinshader"
-	"github.com/hajimehoshi/ebiten/v2/internal/ui"
+	"github.com/blewjy/ebiten/v2/internal/atlas"
+	"github.com/blewjy/ebiten/v2/internal/builtinshader"
+	"github.com/blewjy/ebiten/v2/internal/ui"
 )
 
 // Filter represents the type of texture filter to be used when an image is magnified or minified.

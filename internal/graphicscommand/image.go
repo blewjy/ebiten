@@ -22,10 +22,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/debug"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphics"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver"
-	"github.com/hajimehoshi/ebiten/v2/internal/png"
+	"github.com/blewjy/ebiten/v2/internal/debug"
+	"github.com/blewjy/ebiten/v2/internal/graphics"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver"
+	"github.com/blewjy/ebiten/v2/internal/png"
 )
 
 // Image represents an image that is implemented with OpenGL.

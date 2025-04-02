@@ -21,7 +21,7 @@ import (
 	_ "image/png"
 	"testing"
 
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	"github.com/blewjy/ebiten/v2/ebitenutil"
 )
 
 //go:embed *.png

@@ -31,7 +31,7 @@ import (
 	"github.com/ebitengine/purego"
 	"github.com/ebitengine/purego/objc"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/cocoa"
+	"github.com/blewjy/ebiten/v2/internal/cocoa"
 )
 
 // GPUFamily represents the functionality for families of GPUs.

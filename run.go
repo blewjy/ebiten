@@ -21,9 +21,9 @@ import (
 	"io/fs"
 	"sync/atomic"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/clock"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver"
-	"github.com/hajimehoshi/ebiten/v2/internal/ui"
+	"github.com/blewjy/ebiten/v2/internal/clock"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver"
+	"github.com/blewjy/ebiten/v2/internal/ui"
 )
 
 // Game defines necessary functions for a game.

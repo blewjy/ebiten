@@ -15,7 +15,7 @@
 package twenty48_test
 
 import (
-	"github.com/hajimehoshi/ebiten/v2/examples/2048/2048"
+	"github.com/blewjy/ebiten/v2/examples/2048/2048"
 
 	"fmt"
 	"testing"

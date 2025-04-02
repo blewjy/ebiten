@@ -17,8 +17,8 @@
 package mobile
 
 import (
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/mobile/ebitenmobileview"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/mobile/ebitenmobileview"
 )
 
 func setGame(game ebiten.Game, options *ebiten.RunGameOptions) {

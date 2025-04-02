@@ -22,9 +22,9 @@ import (
 	_ "image/png"
 	"log"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	rmascot "github.com/hajimehoshi/ebiten/v2/examples/resources/images/mascot"
-	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"github.com/blewjy/ebiten/v2"
+	rmascot "github.com/blewjy/ebiten/v2/examples/resources/images/mascot"
+	"github.com/blewjy/ebiten/v2/inpututil"
 )
 
 const (

@@ -18,7 +18,7 @@ import (
 	"image"
 	"testing"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/packing"
+	"github.com/blewjy/ebiten/v2/internal/packing"
 )
 
 func TestPage(t *testing.T) {

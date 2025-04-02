@@ -17,8 +17,8 @@ package ebitenutil
 import (
 	"image/color"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/vector"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/vector"
 )
 
 // DrawLine draws a line segment on the given destination dst.

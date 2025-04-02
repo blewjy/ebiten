@@ -20,9 +20,9 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/debug"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicscommand"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver"
+	"github.com/blewjy/ebiten/v2/internal/debug"
+	"github.com/blewjy/ebiten/v2/internal/graphicscommand"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver"
 )
 
 // forceRestoration reports whether restoration forcibly happens or not.

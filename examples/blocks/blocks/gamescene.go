@@ -23,12 +23,12 @@ import (
 	"math/rand/v2"
 	"strconv"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/colorm"
-	"github.com/hajimehoshi/ebiten/v2/examples/resources/images"
-	"github.com/hajimehoshi/ebiten/v2/inpututil"
-	"github.com/hajimehoshi/ebiten/v2/text/v2"
-	"github.com/hajimehoshi/ebiten/v2/vector"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/colorm"
+	"github.com/blewjy/ebiten/v2/examples/resources/images"
+	"github.com/blewjy/ebiten/v2/inpututil"
+	"github.com/blewjy/ebiten/v2/text/v2"
+	"github.com/blewjy/ebiten/v2/vector"
 )
 
 var (

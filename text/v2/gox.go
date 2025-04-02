@@ -21,8 +21,8 @@ import (
 	"golang.org/x/image/font"
 	"golang.org/x/image/math/fixed"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/vector"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/vector"
 )
 
 var _ Face = (*GoXFace)(nil)

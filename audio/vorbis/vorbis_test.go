@@ -22,8 +22,8 @@ import (
 
 	"github.com/jfreymuth/oggvorbis"
 
-	"github.com/hajimehoshi/ebiten/v2/audio"
-	"github.com/hajimehoshi/ebiten/v2/audio/vorbis"
+	"github.com/blewjy/ebiten/v2/audio"
+	"github.com/blewjy/ebiten/v2/audio/vorbis"
 )
 
 var (

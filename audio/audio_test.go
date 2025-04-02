@@ -21,7 +21,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hajimehoshi/ebiten/v2/audio"
+	"github.com/blewjy/ebiten/v2/audio"
 )
 
 var context *audio.Context

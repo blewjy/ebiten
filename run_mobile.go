@@ -17,7 +17,7 @@
 package ebiten
 
 import (
-	"github.com/hajimehoshi/ebiten/v2/internal/ui"
+	"github.com/blewjy/ebiten/v2/internal/ui"
 )
 
 // RunGameWithoutMainLoop runs the game, but doesn't call the loop on the main (UI) thread.

@@ -22,7 +22,7 @@ import (
 	"math/rand/v2"
 	"testing"
 
-	"github.com/hajimehoshi/ebiten/v2/audio/internal/convert"
+	"github.com/blewjy/ebiten/v2/audio/internal/convert"
 )
 
 func randFloat32s(n int) []float32 {

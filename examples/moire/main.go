@@ -20,8 +20,8 @@ package main
 import (
 	"log"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/inpututil"
 )
 
 const (

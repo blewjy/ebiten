@@ -23,9 +23,9 @@ import (
 	"sort"
 	"strconv"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/examples/resources/fonts"
-	"github.com/hajimehoshi/ebiten/v2/text/v2"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/examples/resources/fonts"
+	"github.com/blewjy/ebiten/v2/text/v2"
 )
 
 var (

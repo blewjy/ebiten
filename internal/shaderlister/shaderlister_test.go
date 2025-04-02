@@ -24,7 +24,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/graphics"
+	"github.com/blewjy/ebiten/v2/internal/graphics"
 )
 
 func hasGoCommand() bool {
@@ -39,7 +39,7 @@ func TestRun(t *testing.T) {
 		t.Skip("go command is missing")
 	}
 
-	cmd := exec.Command("go", "run", "github.com/hajimehoshi/ebiten/v2/internal/shaderlister", "github.com/hajimehoshi/ebiten/v2/internal/shaderlister/shaderlistertest")
+	cmd := exec.Command("go", "run", "github.com/blewjy/ebiten/v2/internal/shaderlister", "github.com/blewjy/ebiten/v2/internal/shaderlister/shaderlistertest")
 	out, err := cmd.Output()
 	if err != nil {
 		if err, ok := err.(*exec.ExitError); ok {
@@ -112,7 +112,7 @@ func TestEmpty(t *testing.T) {
 		t.Skip("go command is missing")
 	}
 
-	cmd := exec.Command("go", "run", "github.com/hajimehoshi/ebiten/v2/internal/shaderlister", "github.com/ebitengine/purego")
+	cmd := exec.Command("go", "run", "github.com/blewjy/ebiten/v2/internal/shaderlister", "github.com/ebitengine/purego")
 	out, err := cmd.Output()
 	if err != nil {
 		if err, ok := err.(*exec.ExitError); ok {

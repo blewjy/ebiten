@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/builtinshader"
+	"github.com/blewjy/ebiten/v2/internal/builtinshader"
 )
 
 func main() {

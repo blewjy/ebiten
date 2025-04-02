@@ -18,7 +18,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/gamepaddb"
+	"github.com/blewjy/ebiten/v2/internal/gamepaddb"
 )
 
 func TestUpdate(t *testing.T) {

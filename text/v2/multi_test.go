@@ -21,8 +21,8 @@ import (
 	"github.com/hajimehoshi/bitmapfont/v3"
 	"golang.org/x/image/font/gofont/goregular"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/text/v2"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/text/v2"
 )
 
 func TestMultiFace(t *testing.T) {

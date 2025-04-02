@@ -30,9 +30,9 @@ import (
 	"golang.org/x/image/font/opentype"
 	"golang.org/x/image/math/fixed"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	t "github.com/hajimehoshi/ebiten/v2/internal/testing"
-	"github.com/hajimehoshi/ebiten/v2/text/v2"
+	"github.com/blewjy/ebiten/v2"
+	t "github.com/blewjy/ebiten/v2/internal/testing"
+	"github.com/blewjy/ebiten/v2/text/v2"
 )
 
 func TestMain(m *testing.M) {

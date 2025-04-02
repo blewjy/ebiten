@@ -17,9 +17,9 @@ package metal
 import (
 	"sync"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/metal/ca"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/metal/mtl"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver/metal/ca"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver/metal/mtl"
 )
 
 type view struct {

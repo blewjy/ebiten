@@ -14,7 +14,7 @@
 
 package ebiten
 
-import "github.com/hajimehoshi/ebiten/v2/internal/builtinshader"
+import "github.com/blewjy/ebiten/v2/internal/builtinshader"
 
 var (
 	ImageToBytes = imageToBytes

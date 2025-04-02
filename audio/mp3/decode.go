@@ -23,8 +23,8 @@ import (
 
 	"github.com/hajimehoshi/go-mp3"
 
-	"github.com/hajimehoshi/ebiten/v2/audio"
-	"github.com/hajimehoshi/ebiten/v2/audio/internal/convert"
+	"github.com/blewjy/ebiten/v2/audio"
+	"github.com/blewjy/ebiten/v2/audio/internal/convert"
 )
 
 const (

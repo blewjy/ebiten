@@ -25,8 +25,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/audio"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/audio"
 )
 
 type emptyStream struct {

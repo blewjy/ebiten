@@ -15,8 +15,8 @@
 package blocks
 
 import (
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/colorm"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/colorm"
 )
 
 const maxFlushCount = 20

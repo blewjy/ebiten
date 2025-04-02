@@ -23,11 +23,11 @@ import (
 
 	"github.com/hajimehoshi/bitmapfont/v3"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/examples/keyboard/keyboard"
-	rkeyboard "github.com/hajimehoshi/ebiten/v2/examples/resources/images/keyboard"
-	"github.com/hajimehoshi/ebiten/v2/inpututil"
-	"github.com/hajimehoshi/ebiten/v2/text/v2"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/examples/keyboard/keyboard"
+	rkeyboard "github.com/blewjy/ebiten/v2/examples/resources/images/keyboard"
+	"github.com/blewjy/ebiten/v2/inpututil"
+	"github.com/blewjy/ebiten/v2/text/v2"
 )
 
 const (

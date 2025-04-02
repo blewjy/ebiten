@@ -15,8 +15,8 @@
 package blocks
 
 import (
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/inpututil"
 )
 
 // Input manages the input state including gamepads and keyboards.

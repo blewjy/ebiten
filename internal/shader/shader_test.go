@@ -22,11 +22,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/shader"
-	"github.com/hajimehoshi/ebiten/v2/internal/shaderir"
-	"github.com/hajimehoshi/ebiten/v2/internal/shaderir/glsl"
-	"github.com/hajimehoshi/ebiten/v2/internal/shaderir/hlsl"
-	"github.com/hajimehoshi/ebiten/v2/internal/shaderir/msl"
+	"github.com/blewjy/ebiten/v2/internal/shader"
+	"github.com/blewjy/ebiten/v2/internal/shaderir"
+	"github.com/blewjy/ebiten/v2/internal/shaderir/glsl"
+	"github.com/blewjy/ebiten/v2/internal/shaderir/hlsl"
+	"github.com/blewjy/ebiten/v2/internal/shaderir/msl"
 )
 
 func glslVertexNormalize(str string) string {

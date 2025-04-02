@@ -21,8 +21,8 @@ import (
 	"image"
 	"runtime"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/playstation5"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver/playstation5"
 )
 
 type graphicsDriverCreatorImpl struct{}

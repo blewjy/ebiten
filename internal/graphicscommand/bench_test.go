@@ -18,8 +18,8 @@ import (
 	"image"
 	"testing"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/graphics"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicscommand"
+	"github.com/blewjy/ebiten/v2/internal/graphics"
+	"github.com/blewjy/ebiten/v2/internal/graphicscommand"
 )
 
 func BenchmarkPrependPreservedUniforms(b *testing.B) {

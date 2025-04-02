@@ -17,7 +17,7 @@ package ebiten_test
 import (
 	"testing"
 
-	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/blewjy/ebiten/v2"
 )
 
 func TestScreenSizeInFullscreen(t *testing.T) {

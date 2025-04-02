@@ -29,9 +29,9 @@ import (
 	"runtime"
 	"sync"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/internal/restorable"
-	"github.com/hajimehoshi/ebiten/v2/internal/ui"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/internal/restorable"
+	"github.com/blewjy/ebiten/v2/internal/ui"
 )
 
 type SetGameNotifier interface {

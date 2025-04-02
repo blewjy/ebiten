@@ -20,10 +20,10 @@ import (
 	_ "image/jpeg"
 	"log"
 
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/colorm"
+	"github.com/blewjy/ebiten/v2/examples/resources/images"
 	"github.com/ebitengine/debugui"
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/colorm"
-	"github.com/hajimehoshi/ebiten/v2/examples/resources/images"
 )
 
 const (

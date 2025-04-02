@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver"
 )
 
 type graphicsDriverCreator interface {

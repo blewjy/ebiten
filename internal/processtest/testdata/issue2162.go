@@ -16,7 +16,7 @@
 
 package main
 
-import "github.com/hajimehoshi/ebiten/v2"
+import "github.com/blewjy/ebiten/v2"
 
 func init() {
 	s, err := ebiten.NewShader([]byte(`

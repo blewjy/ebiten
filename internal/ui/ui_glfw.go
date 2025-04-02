@@ -26,13 +26,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/file"
-	"github.com/hajimehoshi/ebiten/v2/internal/gamepad"
-	"github.com/hajimehoshi/ebiten/v2/internal/glfw"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicscommand"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver"
-	"github.com/hajimehoshi/ebiten/v2/internal/hook"
-	"github.com/hajimehoshi/ebiten/v2/internal/microsoftgdk"
+	"github.com/blewjy/ebiten/v2/internal/file"
+	"github.com/blewjy/ebiten/v2/internal/gamepad"
+	"github.com/blewjy/ebiten/v2/internal/glfw"
+	"github.com/blewjy/ebiten/v2/internal/graphicscommand"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver"
+	"github.com/blewjy/ebiten/v2/internal/hook"
+	"github.com/blewjy/ebiten/v2/internal/microsoftgdk"
 )
 
 func driverCursorModeToGLFWCursorMode(mode CursorMode) int {

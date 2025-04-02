@@ -17,8 +17,8 @@ package text
 import (
 	"strings"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/vector"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/vector"
 )
 
 // Align is the alignment that determines how to put a text.

@@ -20,7 +20,7 @@ import (
 	"math"
 	"testing"
 
-	"github.com/hajimehoshi/ebiten/v2/audio/vorbis"
+	"github.com/blewjy/ebiten/v2/audio/vorbis"
 )
 
 type f32reader struct {

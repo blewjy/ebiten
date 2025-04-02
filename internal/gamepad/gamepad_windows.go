@@ -15,7 +15,7 @@
 package gamepad
 
 import (
-	"github.com/hajimehoshi/ebiten/v2/internal/microsoftgdk"
+	"github.com/blewjy/ebiten/v2/internal/microsoftgdk"
 )
 
 func newNativeGamepadsImpl() nativeGamepads {

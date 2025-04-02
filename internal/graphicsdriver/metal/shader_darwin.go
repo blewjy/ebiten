@@ -18,10 +18,10 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/metal/mtl"
-	"github.com/hajimehoshi/ebiten/v2/internal/shaderir"
-	"github.com/hajimehoshi/ebiten/v2/internal/shaderir/msl"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver/metal/mtl"
+	"github.com/blewjy/ebiten/v2/internal/shaderir"
+	"github.com/blewjy/ebiten/v2/internal/shaderir/msl"
 )
 
 type precompiledLibraries struct {

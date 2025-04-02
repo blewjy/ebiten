@@ -27,7 +27,7 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/gamepaddb"
+	"github.com/blewjy/ebiten/v2/internal/gamepaddb"
 )
 
 const dirName = "/dev/input"

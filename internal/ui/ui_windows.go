@@ -22,12 +22,12 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/glfw"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/directx"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/opengl"
-	"github.com/hajimehoshi/ebiten/v2/internal/microsoftgdk"
-	"github.com/hajimehoshi/ebiten/v2/internal/winver"
+	"github.com/blewjy/ebiten/v2/internal/glfw"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver/directx"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver/opengl"
+	"github.com/blewjy/ebiten/v2/internal/microsoftgdk"
+	"github.com/blewjy/ebiten/v2/internal/winver"
 )
 
 func (u *UserInterface) initializePlatform() error {

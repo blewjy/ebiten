@@ -63,9 +63,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/metal"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/opengl"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver/metal"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver/opengl"
 )
 
 type graphicsDriverCreatorImpl struct {

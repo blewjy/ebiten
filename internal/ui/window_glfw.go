@@ -20,7 +20,7 @@ import (
 	"image"
 	"runtime"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/glfw"
+	"github.com/blewjy/ebiten/v2/internal/glfw"
 )
 
 type glfwWindow struct {

@@ -19,8 +19,8 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/internal/hook"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/internal/hook"
 )
 
 type gamepadState struct {

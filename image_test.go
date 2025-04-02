@@ -26,11 +26,11 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/examples/resources/images"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphics"
-	t "github.com/hajimehoshi/ebiten/v2/internal/testing"
-	"github.com/hajimehoshi/ebiten/v2/internal/ui"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/examples/resources/images"
+	"github.com/blewjy/ebiten/v2/internal/graphics"
+	t "github.com/blewjy/ebiten/v2/internal/testing"
+	"github.com/blewjy/ebiten/v2/internal/ui"
 )
 
 // maxImageSize is a maximum image size that should work in almost every environment.

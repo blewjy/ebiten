@@ -14,8 +14,8 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/microsoftgdk"
-	"github.com/hajimehoshi/ebiten/v2/internal/winver"
+	"github.com/blewjy/ebiten/v2/internal/microsoftgdk"
+	"github.com/blewjy/ebiten/v2/internal/winver"
 )
 
 func (w *Window) getWindowStyle() uint32 {

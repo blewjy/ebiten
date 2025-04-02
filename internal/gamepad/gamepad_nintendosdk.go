@@ -25,7 +25,7 @@ import "C"
 import (
 	"time"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/gamepaddb"
+	"github.com/blewjy/ebiten/v2/internal/gamepaddb"
 )
 
 type nativeGamepadsImpl struct {

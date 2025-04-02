@@ -22,8 +22,8 @@ import (
 	"log"
 	"math"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/examples/resources/images"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/examples/resources/images"
 )
 
 const (

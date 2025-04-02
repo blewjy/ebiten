@@ -17,7 +17,7 @@
 package playstation5
 
 import (
-	"github.com/hajimehoshi/ebiten/v2/internal/shaderir"
+	"github.com/blewjy/ebiten/v2/internal/shaderir"
 )
 
 var (

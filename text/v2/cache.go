@@ -18,7 +18,7 @@ import (
 	"math"
 	"sync"
 
-	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/blewjy/ebiten/v2"
 )
 
 const infTick = math.MaxInt64

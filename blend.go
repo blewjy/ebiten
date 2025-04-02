@@ -17,7 +17,7 @@ package ebiten
 import (
 	"fmt"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver"
 )
 
 // Blend is a blending way of the source color and the destination color.

@@ -15,8 +15,8 @@
 package colorm
 
 import (
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/internal/builtinshader"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/internal/builtinshader"
 )
 
 // DrawImageOptions represents options for DrawImage.

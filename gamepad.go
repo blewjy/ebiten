@@ -15,8 +15,8 @@
 package ebiten
 
 import (
-	"github.com/hajimehoshi/ebiten/v2/internal/gamepad"
-	"github.com/hajimehoshi/ebiten/v2/internal/gamepaddb"
+	"github.com/blewjy/ebiten/v2/internal/gamepad"
+	"github.com/blewjy/ebiten/v2/internal/gamepaddb"
 )
 
 // GamepadButton represents a gamepad button.

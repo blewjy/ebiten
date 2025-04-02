@@ -15,7 +15,7 @@
 package text
 
 import (
-	"github.com/hajimehoshi/ebiten/v2/vector"
+	"github.com/blewjy/ebiten/v2/vector"
 )
 
 var _ Face = (*LimitedFace)(nil)

@@ -22,10 +22,10 @@ import (
 
 	_ "github.com/ebitengine/hideconsole"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/atlas"
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver"
-	"github.com/hajimehoshi/ebiten/v2/internal/mipmap"
-	"github.com/hajimehoshi/ebiten/v2/internal/thread"
+	"github.com/blewjy/ebiten/v2/internal/atlas"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver"
+	"github.com/blewjy/ebiten/v2/internal/mipmap"
+	"github.com/blewjy/ebiten/v2/internal/thread"
 )
 
 // RegularTermination represents a regular termination.

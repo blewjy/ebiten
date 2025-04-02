@@ -23,7 +23,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/opengl/gl"
+	"github.com/blewjy/ebiten/v2/internal/graphicsdriver/opengl/gl"
 )
 
 func main() {

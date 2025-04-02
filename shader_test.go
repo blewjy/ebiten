@@ -21,8 +21,8 @@ import (
 	"math"
 	"testing"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/internal/builtinshader"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/internal/builtinshader"
 )
 
 func TestShaderFill(t *testing.T) {

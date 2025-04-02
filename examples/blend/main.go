@@ -24,9 +24,9 @@ import (
 
 	"golang.org/x/image/font/inconsolata"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/examples/resources/images/blend"
-	"github.com/hajimehoshi/ebiten/v2/text/v2"
+	"github.com/blewjy/ebiten/v2"
+	"github.com/blewjy/ebiten/v2/examples/resources/images/blend"
+	"github.com/blewjy/ebiten/v2/text/v2"
 )
 
 const (

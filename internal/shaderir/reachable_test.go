@@ -18,8 +18,8 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/hajimehoshi/ebiten/v2/internal/shader"
-	"github.com/hajimehoshi/ebiten/v2/internal/shaderir"
+	"github.com/blewjy/ebiten/v2/internal/shader"
+	"github.com/blewjy/ebiten/v2/internal/shaderir"
 )
 
 func compileToIR(src []byte) (*shaderir.Program, error) {
