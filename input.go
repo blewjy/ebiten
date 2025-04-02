@@ -87,6 +87,11 @@ func CursorPosition() (x, y int) {
 	return int(cx), int(cy)
 }
 
+func CursorPostionF32() (x, y float32) {
+	cx, cy := theInputState.cursorPosition()
+	return float32(cx), float32(cy)
+}
+
 // Wheel returns x and y offsets of the mouse wheel or touchpad scroll.
 // It returns 0 if the wheel isn't being rolled.
 //
