@@ -822,7 +822,7 @@ static GLFWbool createNativeWindow(_GLFWwindow* window,
         }
 
         if (wndconfig->floating)
-            [window->ns.object setLevel:NSFloatingWindowLevel];
+            [window->ns.object setLevel:NSStatusWindowLevel];
 
         if (wndconfig->maximized)
             [window->ns.object zoom:nil];
@@ -1299,7 +1299,7 @@ void _glfwPlatformSetWindowMonitor(_GLFWwindow* window,
         }
 
         if (window->floating)
-            [window->ns.object setLevel:NSFloatingWindowLevel];
+            [window->ns.object setLevel:NSStatusWindowLevel];
         else
             [window->ns.object setLevel:NSNormalWindowLevel];
 
@@ -1434,7 +1434,7 @@ void _glfwPlatformSetWindowFloating(_GLFWwindow* window, GLFWbool enabled)
 {
     @autoreleasepool {
     if (enabled)
-        [window->ns.object setLevel:NSFloatingWindowLevel];
+        [window->ns.object setLevel:NSStatusWindowLevel];
     else
         [window->ns.object setLevel:NSNormalWindowLevel];
     } // autoreleasepool
