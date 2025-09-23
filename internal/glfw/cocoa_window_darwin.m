@@ -1433,6 +1433,13 @@ void _glfwPlatformSetWindowDecorated(_GLFWwindow* window, GLFWbool enabled)
 void _glfwPlatformSetWindowFloating(_GLFWwindow* window, GLFWbool enabled)
 {
     @autoreleasepool {
+    NSLog(@"NSNormalWindowLevel = %ld", (long)NSNormalWindowLevel);
+    NSLog(@"NSFloatingWindowLevel = %ld", (long)NSFloatingWindowLevel);
+    NSLog(@"NSModalPanelWindowLevel = %ld", (long)NSModalPanelWindowLevel);
+    NSLog(@"NSMainMenuWindowLevel = %ld", (long)NSMainMenuWindowLevel);
+    NSLog(@"NSTornOffMenuWindowLevel = %ld", (long)NSTornOffMenuWindowLevel);
+    NSLog(@"NSStatusWindowLevel = %ld", (long)NSStatusWindowLevel);
+    NSLog(@"NSScreenSaverWindowLevel = %ld", (long)NSScreenSaverWindowLevel);
     if (enabled)
         [window->ns.object setLevel:NSPopUpMenuWindowLevel];
     else
