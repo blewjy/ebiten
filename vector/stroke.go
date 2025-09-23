@@ -63,8 +63,8 @@ type StrokeOptions struct {
 	MiterLimit float32
 }
 
-// AddPathStrokeOptions is options for [Path.AddPathStroke].
-type AddPathStrokeOptions struct {
+// AddStrokeOptions is options for [Path.AddStroke].
+type AddStrokeOptions struct {
 	// StrokeOptions is options for the stroke.
 	StrokeOptions
 
@@ -74,10 +74,10 @@ type AddPathStrokeOptions struct {
 	GeoM ebiten.GeoM
 }
 
-// AddPathStroke adds a stroke path to the path p.
+// AddStroke adds a stroke path to the path p.
 //
 // The added stroke path must be rendered with FileRuleNonZero.
-func (p *Path) AddPathStroke(src *Path, options *AddPathStrokeOptions) {
+func (p *Path) AddStroke(src *Path, options *AddStrokeOptions) {
 	if options == nil {
 		return
 	}
@@ -301,6 +301,9 @@ func doAppendParalleledQuad(path *Path, p0, p1, p2 point, dist float32, level in
 		return
 	}
 
+	minAllowance := max(dist*63/64, 0)
+	maxAllowance := dist * 65 / 64
+
 	var needSplit bool
 	for _, t := range []float32{0.25, 0.75} {
 		gotP := point{
@@ -319,7 +322,7 @@ func doAppendParalleledQuad(path *Path, p0, p1, p2 point, dist float32, level in
 		}
 		expectedP := p.add(v)
 
-		if !arePointsInRange(gotP, expectedP, max(dist-1.0/16.0, 0), dist+1.0/16.0) {
+		if !arePointsInRange(gotP, expectedP, minAllowance, maxAllowance) {
 			needSplit = true
 			break
 		}

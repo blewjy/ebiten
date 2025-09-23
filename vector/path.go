@@ -18,6 +18,7 @@
 package vector
 
 import (
+	"image"
 	"math"
 	"slices"
 
@@ -51,6 +52,8 @@ func abs(x float32) float32 {
 	}
 	return x
 }
+
+const epsilon = 1e-6
 
 type point struct {
 	x float32
@@ -90,15 +93,19 @@ func (v vec2) mul(s float32) vec2 {
 }
 
 type subPath struct {
-	ops    []op
-	start  point
-	closed bool
+	ops                []op
+	start              point
+	closed             bool
+	cachedValid        bool
+	isCachedValidValid bool
 }
 
 func (s *subPath) reset() {
 	s.ops = s.ops[:0]
 	s.start = point{}
 	s.closed = false
+	s.cachedValid = false
+	s.isCachedValidValid = false
 }
 
 func isRegularF32(x float32) bool {
@@ -106,21 +113,33 @@ func isRegularF32(x float32) bool {
 }
 
 func (s *subPath) isValid() bool {
+	if s.isCachedValidValid {
+		return s.cachedValid
+	}
+
 	if !isRegularF32(s.start.x) || !isRegularF32(s.start.y) {
+		s.cachedValid = false
+		s.isCachedValidValid = true
 		return false
 	}
 	for _, op := range s.ops {
 		switch op.typ {
 		case opTypeLineTo:
 			if !isRegularF32(op.p1.x) || !isRegularF32(op.p1.y) {
+				s.cachedValid = false
+				s.isCachedValidValid = true
 				return false
 			}
 		case opTypeQuadTo:
 			if !isRegularF32(op.p1.x) || !isRegularF32(op.p1.y) || !isRegularF32(op.p2.x) || !isRegularF32(op.p2.y) {
+				s.cachedValid = false
+				s.isCachedValidValid = true
 				return false
 			}
 		}
 	}
+	s.cachedValid = true
+	s.isCachedValidValid = true
 	return true
 }
 
@@ -230,6 +249,15 @@ func (p *Path) resetFlatPaths() {
 	p.flatPaths = p.flatPaths[:0]
 }
 
+func (p *Path) resetLastSubPathCacheStates() {
+	if len(p.subPaths) == 0 {
+		return
+	}
+	s := &p.subPaths[len(p.subPaths)-1]
+	s.cachedValid = false
+	s.isCachedValidValid = false
+}
+
 func (p *Path) appendNewFlatPath(pt point) {
 	if cap(p.flatPaths) > len(p.flatPaths) {
 		// Reuse the last flat path since the last flat path might have an already allocated slice.
@@ -282,6 +310,7 @@ func (p *Path) MoveTo(x, y float32) {
 	if len(p.subPaths) == 0 || len(p.subPaths[len(p.subPaths)-1].ops) > 0 {
 		p.addSubPaths(1)
 	}
+	p.resetLastSubPathCacheStates()
 	p.subPaths[len(p.subPaths)-1].start = point{x: x, y: y}
 	p.subPaths[len(p.subPaths)-1].closed = false
 }
@@ -299,6 +328,7 @@ func (p *Path) LineTo(x, y float32) {
 		p.addSubPaths(1)
 		p.subPaths[len(p.subPaths)-1].start = p.subPaths[len(p.subPaths)-2].start
 	}
+	p.resetLastSubPathCacheStates()
 	if cur, ok := p.currentPosition(); ok {
 		if cur.x == x && cur.y == y {
 			return
@@ -322,6 +352,7 @@ func (p *Path) QuadTo(x1, y1, x2, y2 float32) {
 		p.addSubPaths(1)
 		p.subPaths[len(p.subPaths)-1].start = p.subPaths[len(p.subPaths)-2].start
 	}
+	p.resetLastSubPathCacheStates()
 	if cur, ok := p.currentPosition(); ok {
 		if cur.x == x2 && cur.y == y2 {
 			return
@@ -337,11 +368,19 @@ func (p *Path) QuadTo(x1, y1, x2, y2 float32) {
 // CubicTo adds a cubic Bézier curve to the path.
 // (x1, y1) and (x2, y2) are the control points, and (x3, y3) is the destination.
 func (p *Path) CubicTo(x1, y1, x2, y2, x3, y3 float32) {
-	p.resetFlatPaths()
-	p.cubicTo(x1, y1, x2, y2, x3, y3, 0)
+	cur, ok := p.currentPosition()
+	if !ok {
+		cur = point{x: x1, y: y1}
+	}
+	minX := min(cur.x, x1, x2, x3)
+	maxX := max(cur.x, x1, x2, x3)
+	minY := min(cur.y, y1, y2, y3)
+	maxY := max(cur.y, y1, y2, y3)
+	allowance := max(maxX-minX, maxY-minY) / 1024
+	p.cubicTo(x1, y1, x2, y2, x3, y3, 0, allowance)
 }
 
-func (p *Path) cubicTo(x1, y1, x2, y2, x3, y3 float32, level int) {
+func (p *Path) cubicTo(x1, y1, x2, y2, x3, y3 float32, level int, allowance float32) {
 	cur, ok := p.currentPosition()
 	if !ok {
 		cur = point{x: x1, y: y1}
@@ -360,7 +399,7 @@ func (p *Path) cubicTo(x1, y1, x2, y2, x3, y3 float32, level int) {
 		x: -0.25*p0.x + 0.75*p1.x + 0.75*p2.x - 0.25*p3.x,
 		y: -0.25*p0.y + 0.75*p1.y + 0.75*p2.y - 0.25*p3.y,
 	}
-	if level > 5 || isQuadraticCloseEnoughToCubic(p0, p3, m, p1, p2) {
+	if level > 5 || isQuadraticCloseEnoughToCubic(p0, p3, m, p1, p2, allowance) {
 		p.QuadTo(m.x, m.y, p3.x, p3.y)
 		return
 	}
@@ -396,11 +435,11 @@ func (p *Path) cubicTo(x1, y1, x2, y2, x3, y3 float32, level int) {
 		x: (p012.x + p123.x) / 2,
 		y: (p012.y + p123.y) / 2,
 	}
-	p.cubicTo(p01.x, p01.y, p012.x, p012.y, p0123.x, p0123.y, level+1)
-	p.cubicTo(p123.x, p123.y, p23.x, p23.y, p3.x, p3.y, level+1)
+	p.cubicTo(p01.x, p01.y, p012.x, p012.y, p0123.x, p0123.y, level+1, allowance)
+	p.cubicTo(p123.x, p123.y, p23.x, p23.y, p3.x, p3.y, level+1, allowance)
 }
 
-func isQuadraticCloseEnoughToCubic(start, end, qc1, cc1, cc2 point) bool {
+func isQuadraticCloseEnoughToCubic(start, end, qc1, cc1, cc2 point, allowance float32) bool {
 	for _, t := range []float32{0.25, 0.75} {
 		q := point{
 			x: (1-t)*(1-t)*start.x + 2*(1-t)*t*qc1.x + t*t*end.x,
@@ -410,8 +449,7 @@ func isQuadraticCloseEnoughToCubic(start, end, qc1, cc1, cc2 point) bool {
 			x: (1-t)*(1-t)*(1-t)*start.x + 3*(1-t)*(1-t)*t*cc1.x + 3*(1-t)*t*t*cc2.x + t*t*t*end.x,
 			y: (1-t)*(1-t)*(1-t)*start.y + 3*(1-t)*(1-t)*t*cc1.y + 3*(1-t)*t*t*cc2.y + t*t*t*end.y,
 		}
-		// 1.0/16.0 is an arbitrary threshold.
-		if !arePointsInRange(q, c, 0, 1.0/16.0) {
+		if !arePointsInRange(q, c, 0, allowance) {
 			return false
 		}
 	}
@@ -435,19 +473,7 @@ func (p *Path) Close() {
 	if len(p.subPaths[len(p.subPaths)-1].ops) > 0 {
 		subPath := &p.subPaths[len(p.subPaths)-1]
 		start := subPath.start
-		end := subPath.endAtOp(len(subPath.ops) - 1)
-		if arePointsInRange(start, end, 0, 1.0/16.0) {
-			// Overwrite the last operation to avoid a too short line segment.
-			// The last operation matters especially when creating a stroke.
-			switch op := subPath.ops[len(subPath.ops)-1]; op.typ {
-			case opTypeLineTo:
-				op.p1 = start
-			case opTypeQuadTo:
-				op.p2 = start
-			}
-		} else {
-			p.LineTo(start.x, start.y)
-		}
+		p.LineTo(start.x, start.y)
 	}
 	p.subPaths[len(p.subPaths)-1].closed = true
 }
@@ -488,6 +514,15 @@ func crossingPointForTwoLines(p00, p01, p10, p11 point) point {
 	a0, b0, c0 := lineForTwoPoints(p00, p01)
 	a1, b1, c1 := lineForTwoPoints(p10, p11)
 	det := a0*b1 - a1*b0
+
+	// If det is close to 0, the two lines are almost parallel.
+	if abs(det) < epsilon {
+		return point{
+			x: float32(math.NaN()),
+			y: float32(math.NaN()),
+		}
+	}
+
 	return point{
 		x: (b0*c1 - b1*c0) / det,
 		y: (a1*c0 - a0*c1) / det,
@@ -547,7 +582,7 @@ func (p *Path) ArcTo(x1, y1, x2, y2, radius float32) {
 	}
 
 	// If the start and end points are too close, just add a line segment to avoid strange rendering results.
-	if arePointsInRange(p0, point{x: x2, y: y2}, 0, 1.0/2.0) {
+	if arePointsInRange(p0, point{x: x2, y: y2}, 0, radius) {
 		p.LineTo(x2, y2)
 		return
 	}
@@ -716,33 +751,8 @@ func (p *Path) closeFlatPath() {
 //
 // Deprecated: as of v2.9. Use [FillPath] instead.
 func (p *Path) AppendVerticesAndIndicesForFilling(vertices []ebiten.Vertex, indices []uint16) ([]ebiten.Vertex, []uint16) {
-	return appendVerticesAndIndicesForFilling(p, vertices, indices)
-}
-
-// AppendVerticesAndIndicesForFilling32 appends vertices and indices to fill this path and returns them.
-// AppendVerticesAndIndicesForFilling32 is the version of AppendVerticesAndIndicesForFilling with uint32 indices.
-//
-// AppendVerticesAndIndicesForFilling32 works in a similar way to the built-in append function.
-// If the arguments are nils, AppendVerticesAndIndicesForFilling32 returns new slices.
-//
-// The returned vertice's SrcX and SrcY are 0, and ColorR, ColorG, ColorB, and ColorA are 1.
-//
-// The returned values are intended to be passed to DrawTriangles or DrawTrianglesShader with FileRuleNonZero or FillRuleEvenOdd
-// in order to render a complex polygon like a concave polygon, a polygon with holes, or a self-intersecting polygon.
-//
-// The returned vertices and indices should be rendered with a solid (non-transparent) color with the default Blend (source-over).
-// Otherwise, there is no guarantee about the rendering result.
-//
-// Deprecated: as of v2.9. Use [FillPath] instead.
-func (p *Path) AppendVerticesAndIndicesForFilling32(vertices []ebiten.Vertex, indices []uint32) ([]ebiten.Vertex, []uint32) {
-	return appendVerticesAndIndicesForFilling(p, vertices, indices)
-}
-
-func appendVerticesAndIndicesForFilling[T ~uint16 | ~uint32](path *Path, vertices []ebiten.Vertex, indices []T) ([]ebiten.Vertex, []T) {
-	// TODO: Add tests.
-
-	base := T(len(vertices))
-	for _, flatPath := range path.ensureFlatPaths() {
+	base := uint16(len(vertices))
+	for _, flatPath := range p.ensureFlatPaths() {
 		if flatPath.pointCount() < 3 {
 			continue
 		}
@@ -760,9 +770,9 @@ func appendVerticesAndIndicesForFilling[T ~uint16 | ~uint32](path *Path, vertice
 			if i < 2 {
 				continue
 			}
-			indices = append(indices, base, base+T(i-1), base+T(i))
+			indices = append(indices, base, base+uint16(i-1), base+uint16(i))
 		}
-		base += T(flatPath.pointCount())
+		base += uint16(flatPath.pointCount())
 	}
 	return vertices, indices
 }
@@ -801,7 +811,10 @@ func (p *Path) AddPath(src *Path, options *AddPathOptions) {
 	// p might be the same as src. Use srcN to avoid modifying the overlapped region.
 	for i, origSubPath := range src.subPaths[:srcN] {
 		sx, sy := options.GeoM.Apply(float64(origSubPath.start.x), float64(origSubPath.start.y))
-		p.subPaths[n+i].ops = slices.Grow(origSubPath.ops, len(origSubPath.ops))[:len(origSubPath.ops)]
+		if m := len(origSubPath.ops) - len(p.subPaths[n+i].ops); m > 0 {
+			p.subPaths[n+i].ops = slices.Grow(p.subPaths[n+i].ops, m)
+		}
+		p.subPaths[n+i].ops = p.subPaths[n+i].ops[:len(origSubPath.ops)]
 		p.subPaths[n+i].start = point{x: float32(sx), y: float32(sy)}
 		p.subPaths[n+i].closed = origSubPath.closed
 
@@ -884,35 +897,15 @@ func (p *Path) normalize() {
 // The returned values are intended to be passed to DrawTriangles or DrawTrianglesShader with a solid (non-transparent) color
 // with FillRuleFillAll or FillRuleNonZero, not FileRuleEvenOdd.
 //
-// Deprecated: as of v2.9. Use [StrokePath] or [Path.AddPathStroke] instead.
+// Deprecated: as of v2.9. Use [StrokePath] or [Path.AddStroke] instead.
 func (p *Path) AppendVerticesAndIndicesForStroke(vertices []ebiten.Vertex, indices []uint16, op *StrokeOptions) ([]ebiten.Vertex, []uint16) {
-	return appendVerticesAndIndicesForStroke(p, vertices, indices, op)
-}
-
-// AppendVerticesAndIndicesForStroke32 appends vertices and indices to render a stroke of this path and returns them.
-// AppendVerticesAndIndicesForStroke32 is the version of AppendVerticesAndIndicesForStroke with uint32 indices.
-//
-// AppendVerticesAndIndicesForStroke32 works in a similar way to the built-in append function.
-// If the arguments are nils, AppendVerticesAndIndicesForStroke32 returns new slices.
-//
-// The returned vertice's SrcX and SrcY are 0, and ColorR, ColorG, ColorB, and ColorA are 1.
-//
-// The returned values are intended to be passed to DrawTriangles or DrawTrianglesShader with a solid (non-transparent) color
-// with FillRuleFillAll or FillRuleNonZero, not FileRuleEvenOdd.
-//
-// Deprecated: as of v2.9. Use [StrokePath] or [Path.AddPathStroke] instead.
-func (p *Path) AppendVerticesAndIndicesForStroke32(vertices []ebiten.Vertex, indices []uint32, op *StrokeOptions) ([]ebiten.Vertex, []uint32) {
-	return appendVerticesAndIndicesForStroke(p, vertices, indices, op)
-}
-
-func appendVerticesAndIndicesForStroke[T ~uint16 | ~uint32](path *Path, vertices []ebiten.Vertex, indices []T, op *StrokeOptions) ([]ebiten.Vertex, []T) {
 	if op == nil {
 		return vertices, indices
 	}
 
 	var rects [][4]point
 	var tmpPath Path
-	for _, flatPath := range path.ensureFlatPaths() {
+	for _, flatPath := range p.ensureFlatPaths() {
 		if flatPath.pointCount() < 2 {
 			continue
 		}
@@ -949,7 +942,7 @@ func appendVerticesAndIndicesForStroke[T ~uint16 | ~uint32](path *Path, vertices
 		}
 
 		for i, rect := range rects {
-			idx := T(len(vertices))
+			idx := uint16(len(vertices))
 			for _, pt := range rect {
 				vertices = append(vertices, ebiten.Vertex{
 					DstX:   pt.x,
@@ -1015,7 +1008,7 @@ func appendVerticesAndIndicesForStroke[T ~uint16 | ~uint32](path *Path, vertices
 					}
 					tmpPath.LineTo(nextRect[2].x, nextRect[2].y)
 				}
-				vertices, indices = appendVerticesAndIndicesForFilling(&tmpPath, vertices, indices)
+				vertices, indices = tmpPath.AppendVerticesAndIndicesForFilling(vertices, indices)
 
 			case LineJoinBevel:
 				// Triangle
@@ -1028,7 +1021,7 @@ func appendVerticesAndIndicesForStroke[T ~uint16 | ~uint32](path *Path, vertices
 					tmpPath.LineTo(rect[3].x, rect[3].y)
 					tmpPath.LineTo(nextRect[2].x, nextRect[2].y)
 				}
-				vertices, indices = appendVerticesAndIndicesForFilling(&tmpPath, vertices, indices)
+				vertices, indices = tmpPath.AppendVerticesAndIndicesForFilling(vertices, indices)
 
 			case LineJoinRound:
 				// Arc
@@ -1039,7 +1032,7 @@ func appendVerticesAndIndicesForStroke[T ~uint16 | ~uint32](path *Path, vertices
 				} else {
 					tmpPath.Arc(c.x, c.y, op.Width/2, a0+math.Pi, a1+math.Pi, CounterClockwise)
 				}
-				vertices, indices = appendVerticesAndIndicesForFilling(&tmpPath, vertices, indices)
+				vertices, indices = tmpPath.AppendVerticesAndIndicesForFilling(vertices, indices)
 			}
 		}
 
@@ -1068,7 +1061,7 @@ func appendVerticesAndIndicesForStroke[T ~uint16 | ~uint32](path *Path, vertices
 				tmpPath.Reset()
 				tmpPath.MoveTo(startR[0].x, startR[0].y)
 				tmpPath.Arc(c.x, c.y, op.Width/2, a, a+math.Pi, CounterClockwise)
-				vertices, indices = appendVerticesAndIndicesForFilling(&tmpPath, vertices, indices)
+				vertices, indices = tmpPath.AppendVerticesAndIndicesForFilling(vertices, indices)
 			}
 			{
 				c := point{
@@ -1080,7 +1073,7 @@ func appendVerticesAndIndicesForStroke[T ~uint16 | ~uint32](path *Path, vertices
 				tmpPath.Reset()
 				tmpPath.MoveTo(endR[1].x, endR[1].y)
 				tmpPath.Arc(c.x, c.y, op.Width/2, a, a+math.Pi, Clockwise)
-				vertices, indices = appendVerticesAndIndicesForFilling(&tmpPath, vertices, indices)
+				vertices, indices = tmpPath.AppendVerticesAndIndicesForFilling(vertices, indices)
 			}
 
 		case LineCapSquare:
@@ -1096,7 +1089,7 @@ func appendVerticesAndIndicesForStroke[T ~uint16 | ~uint32](path *Path, vertices
 				tmpPath.LineTo(startR[0].x+dx, startR[0].y+dy)
 				tmpPath.LineTo(startR[2].x+dx, startR[2].y+dy)
 				tmpPath.LineTo(startR[2].x, startR[2].y)
-				vertices, indices = appendVerticesAndIndicesForFilling(&tmpPath, vertices, indices)
+				vertices, indices = tmpPath.AppendVerticesAndIndicesForFilling(vertices, indices)
 			}
 			{
 				a := math.Atan2(float64(endR[1].y-endR[0].y), float64(endR[1].x-endR[0].x))
@@ -1109,10 +1102,92 @@ func appendVerticesAndIndicesForStroke[T ~uint16 | ~uint32](path *Path, vertices
 				tmpPath.LineTo(endR[1].x+dx, endR[1].y+dy)
 				tmpPath.LineTo(endR[3].x+dx, endR[3].y+dy)
 				tmpPath.LineTo(endR[3].x, endR[3].y)
-				vertices, indices = appendVerticesAndIndicesForFilling(&tmpPath, vertices, indices)
+				vertices, indices = tmpPath.AppendVerticesAndIndicesForFilling(vertices, indices)
 			}
 		}
 	}
 
 	return vertices, indices
+}
+
+func floor(x float32) int {
+	return int(math.Floor(float64(x)))
+}
+
+func ceil(x float32) int {
+	return int(math.Ceil(float64(x)))
+}
+
+// Bounds returns the minimum bounding rectangle of the path.
+func (p *Path) Bounds() image.Rectangle {
+	// Note that (image.Rectangle).Union doesn't work well with empty rectangles.
+	totalMinX := math.MaxInt
+	totalMinY := math.MaxInt
+	totalMaxX := math.MinInt
+	totalMaxY := math.MinInt
+
+	for i := range p.subPaths {
+		subPath := &p.subPaths[i]
+		if !subPath.isValid() {
+			continue
+		}
+
+		minX := math.MaxInt
+		minY := math.MaxInt
+		maxX := math.MinInt
+		maxY := math.MinInt
+		cur := subPath.start
+		for _, op := range subPath.ops {
+			switch op.typ {
+			case opTypeLineTo:
+				minX = min(minX, floor(cur.x), floor(op.p1.x))
+				minY = min(minY, floor(cur.y), floor(op.p1.y))
+				maxX = max(maxX, ceil(cur.x), ceil(op.p1.x))
+				maxY = max(maxY, ceil(cur.y), ceil(op.p1.y))
+				cur = op.p1
+			case opTypeQuadTo:
+				// The candidates are the two control points on the edges (cur and op.p2), and an extremum point.
+				// B(t) = (1-t)*(1-t)*p0 + 2*(1-t)*t*p1 + t*t*p2
+				// B'(t) = 2*(1-t)*(p1-p0) + 2*t*(p2-p1)
+				// B'(t) = 0 <=> t = (p0-p1) / (p0-2*p1+p2)
+				// Avoid an extreme denominator for precision.
+				if denom := cur.x - 2*op.p1.x + op.p2.x; abs(denom) >= 1.0/16.0 {
+					if t := (cur.x - op.p1.x) / denom; t > 0 && t < 1 {
+						ex := (1-t)*(1-t)*cur.x + 2*t*(1-t)*op.p1.x + t*t*op.p2.x
+						minX = min(minX, floor(cur.x), floor(ex), floor(op.p2.x))
+						maxX = max(maxX, ceil(cur.x), ceil(ex), ceil(op.p2.x))
+					} else {
+						minX = min(minX, floor(cur.x), floor(op.p2.x))
+						maxX = max(maxX, ceil(cur.x), ceil(op.p2.x))
+					}
+				} else {
+					// The curve is almost linear. Include all the points for safety.
+					minX = min(minX, floor(cur.x), floor(op.p1.x), floor(op.p2.x))
+					maxX = max(maxX, ceil(cur.x), ceil(op.p1.x), ceil(op.p2.x))
+				}
+				if denom := cur.y - 2*op.p1.y + op.p2.y; abs(denom) >= 1.0/16.0 {
+					if t := (cur.y - op.p1.y) / denom; t > 0 && t < 1 {
+						ex := (1-t)*(1-t)*cur.y + 2*t*(1-t)*op.p1.y + t*t*op.p2.y
+						minY = min(minY, floor(cur.y), floor(ex), floor(op.p2.y))
+						maxY = max(maxY, ceil(cur.y), ceil(ex), ceil(op.p2.y))
+					} else {
+						minY = min(minY, floor(cur.y), floor(op.p2.y))
+						maxY = max(maxY, ceil(cur.y), ceil(op.p2.y))
+					}
+				} else {
+					minY = min(minY, floor(cur.y), floor(op.p1.y), floor(op.p2.y))
+					maxY = max(maxY, ceil(cur.y), ceil(op.p1.y), ceil(op.p2.y))
+				}
+				cur = op.p2
+			}
+		}
+		totalMinX = min(totalMinX, minX)
+		totalMinY = min(totalMinY, minY)
+		totalMaxX = max(totalMaxX, maxX)
+		totalMaxY = max(totalMaxY, maxY)
+	}
+	if totalMinX >= totalMaxX || totalMinY >= totalMaxY {
+		return image.Rectangle{}
+	}
+	return image.Rect(totalMinX, totalMinY, totalMaxX, totalMaxY)
 }

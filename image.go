@@ -58,6 +58,9 @@ type Image struct {
 	// subImageCache is valid only when the image is not a sub-image.
 	subImageCache map[image.Rectangle]*Image
 
+	// subImageGCLastTick is the last tick when old sub images are removed from the cache.
+	subImageGCLastTick int64
+
 	// subImageCacheM is a mutex for subImageCache.
 	// subImageCache can be accessed from the image and its sub-images at the same time,
 	// so the map must be protected by a mutex.
@@ -608,6 +611,10 @@ func (i *Image) DrawTriangles32(vertices []Vertex, indices []uint32, img *Image,
 		return
 	}
 
+	if len(indices) == 0 {
+		return
+	}
+
 	i.invokeUsageCallbacks()
 	img.invokeUsageCallbacks()
 
@@ -648,30 +655,34 @@ func (i *Image) DrawTriangles32(vertices []Vertex, indices []uint32, img *Image,
 	if options.ColorScaleMode == ColorScaleModeStraightAlpha {
 		// Avoid using `for i, v := range vertices` as adding `v` creates a copy from `vertices` unnecessarily on each loop (#3103).
 		for i := range vertices {
+			// Create a temporary slice to reduce boundary checks.
+			vs := vs[i*graphics.VertexFloatCount : i*graphics.VertexFloatCount+8]
 			dx, dy := dst.adjustPositionF32(vertices[i].DstX, vertices[i].DstY)
-			vs[i*graphics.VertexFloatCount] = dx
-			vs[i*graphics.VertexFloatCount+1] = dy
+			vs[0] = dx
+			vs[1] = dy
 			sx, sy := img.adjustPositionF32(vertices[i].SrcX, vertices[i].SrcY)
-			vs[i*graphics.VertexFloatCount+2] = sx
-			vs[i*graphics.VertexFloatCount+3] = sy
-			vs[i*graphics.VertexFloatCount+4] = vertices[i].ColorR * vertices[i].ColorA * cr
-			vs[i*graphics.VertexFloatCount+5] = vertices[i].ColorG * vertices[i].ColorA * cg
-			vs[i*graphics.VertexFloatCount+6] = vertices[i].ColorB * vertices[i].ColorA * cb
-			vs[i*graphics.VertexFloatCount+7] = vertices[i].ColorA * ca
+			vs[2] = sx
+			vs[3] = sy
+			vs[4] = vertices[i].ColorR * vertices[i].ColorA * cr
+			vs[5] = vertices[i].ColorG * vertices[i].ColorA * cg
+			vs[6] = vertices[i].ColorB * vertices[i].ColorA * cb
+			vs[7] = vertices[i].ColorA * ca
 		}
 	} else {
 		// See comment above (#3103).
 		for i := range vertices {
+			// Create a temporary slice to reduce boundary checks.
+			vs := vs[i*graphics.VertexFloatCount : i*graphics.VertexFloatCount+8]
 			dx, dy := dst.adjustPositionF32(vertices[i].DstX, vertices[i].DstY)
-			vs[i*graphics.VertexFloatCount] = dx
-			vs[i*graphics.VertexFloatCount+1] = dy
+			vs[0] = dx
+			vs[1] = dy
 			sx, sy := img.adjustPositionF32(vertices[i].SrcX, vertices[i].SrcY)
-			vs[i*graphics.VertexFloatCount+2] = sx
-			vs[i*graphics.VertexFloatCount+3] = sy
-			vs[i*graphics.VertexFloatCount+4] = vertices[i].ColorR * cr
-			vs[i*graphics.VertexFloatCount+5] = vertices[i].ColorG * cg
-			vs[i*graphics.VertexFloatCount+6] = vertices[i].ColorB * cb
-			vs[i*graphics.VertexFloatCount+7] = vertices[i].ColorA * ca
+			vs[2] = sx
+			vs[3] = sy
+			vs[4] = vertices[i].ColorR * cr
+			vs[5] = vertices[i].ColorG * cg
+			vs[6] = vertices[i].ColorB * cb
+			vs[7] = vertices[i].ColorA * ca
 		}
 	}
 
@@ -819,6 +830,10 @@ func (i *Image) DrawTrianglesShader32(vertices []Vertex, indices []uint32, shade
 		panic("ebiten: the given shader to DrawTrianglesShader must not be disposed")
 	}
 
+	if len(indices) == 0 {
+		return
+	}
+
 	i.invokeUsageCallbacks()
 	if options != nil {
 		for _, img := range options.Images {
@@ -868,23 +883,25 @@ func (i *Image) DrawTrianglesShader32(vertices []Vertex, indices []uint32, shade
 	src := options.Images[0]
 	// Avoid using `for i, v := range vertices` as adding `v` creates a copy from `vertices` unnecessarily on each loop (#3103).
 	for i := range vertices {
+		// Create a temporary slice to reduce boundary checks.
+		vs := vs[i*graphics.VertexFloatCount : i*graphics.VertexFloatCount+12]
 		dx, dy := dst.adjustPositionF32(vertices[i].DstX, vertices[i].DstY)
-		vs[i*graphics.VertexFloatCount] = dx
-		vs[i*graphics.VertexFloatCount+1] = dy
+		vs[0] = dx
+		vs[1] = dy
 		sx, sy := vertices[i].SrcX, vertices[i].SrcY
 		if src != nil {
 			sx, sy = src.adjustPositionF32(sx, sy)
 		}
-		vs[i*graphics.VertexFloatCount+2] = sx
-		vs[i*graphics.VertexFloatCount+3] = sy
-		vs[i*graphics.VertexFloatCount+4] = vertices[i].ColorR
-		vs[i*graphics.VertexFloatCount+5] = vertices[i].ColorG
-		vs[i*graphics.VertexFloatCount+6] = vertices[i].ColorB
-		vs[i*graphics.VertexFloatCount+7] = vertices[i].ColorA
-		vs[i*graphics.VertexFloatCount+8] = vertices[i].Custom0
-		vs[i*graphics.VertexFloatCount+9] = vertices[i].Custom1
-		vs[i*graphics.VertexFloatCount+10] = vertices[i].Custom2
-		vs[i*graphics.VertexFloatCount+11] = vertices[i].Custom3
+		vs[2] = sx
+		vs[3] = sy
+		vs[4] = vertices[i].ColorR
+		vs[5] = vertices[i].ColorG
+		vs[6] = vertices[i].ColorB
+		vs[7] = vertices[i].ColorA
+		vs[8] = vertices[i].Custom0
+		vs[9] = vertices[i].Custom1
+		vs[10] = vertices[i].Custom2
+		vs[11] = vertices[i].Custom3
 	}
 
 	var imgs [graphics.ShaderSrcImageCount]*ui.Image
@@ -1125,12 +1142,17 @@ func (i *Image) SubImage(r image.Rectangle) image.Image {
 	}
 
 	if img, ok := i.subImageCache[r]; ok {
-		img.atime.Store(Tick())
+		img.updateAccessTime()
 		return img
 	}
-	for _, img := range i.subImageCache {
-		if img.atime.Load()+60 < Tick() {
-			delete(i.subImageCache, img.bounds)
+
+	if tick := Tick(); i.subImageGCLastTick < tick {
+		i.subImageGCLastTick = tick
+
+		for _, img := range i.subImageCache {
+			if img.atime.Load()+60 < tick {
+				delete(i.subImageCache, img.bounds)
+			}
 		}
 	}
 
@@ -1145,7 +1167,7 @@ func (i *Image) SubImage(r image.Rectangle) image.Image {
 		i.subImageCache = map[image.Rectangle]*Image{}
 	}
 	i.subImageCache[r] = img
-	img.atime.Store(Tick())
+	img.updateAccessTime()
 
 	return img
 }
@@ -1254,6 +1276,8 @@ func (i *Image) at(x, y int) (r, g, b, a byte) {
 // Set sets the color at (x, y).
 //
 // Set implements the standard draw.Image's Set.
+//
+// If (x, y) is outside the image bounds, Set does nothing.
 //
 // Even if a result is an invalid color as a premultiplied-alpha color, i.e. an alpha value exceeds other color values,
 // the value is kept and is not clamped.
@@ -1419,7 +1443,7 @@ func NewImageWithOptions(bounds image.Rectangle, options *NewImageOptions) *Imag
 
 func newImage(bounds image.Rectangle, imageType atlas.ImageType) *Image {
 	if isRunGameEnded() {
-		panic(fmt.Sprintf("ebiten: NewImage cannot be called after RunGame finishes"))
+		panic("ebiten: NewImage cannot be called after RunGame finishes")
 	}
 
 	width, height := bounds.Dx(), bounds.Dy()

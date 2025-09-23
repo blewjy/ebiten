@@ -15,6 +15,7 @@
 package text_test
 
 import (
+	"bufio"
 	"bytes"
 	"image"
 	"image/color"
@@ -493,5 +494,66 @@ func TestRuneToBoolMap(t *testing.T) {
 		if gotVal, gotOK := rtb.Get(r); gotVal != (v != 0) || !gotOK {
 			t.Fatalf("rune: %c, got: %v, %v; want: %v, %v", r, gotVal, gotOK, v != 0, true)
 		}
+	}
+}
+
+// Issue #3284
+func TestAppendGlyphsWithInvalidSequence(t *testing.T) {
+	goxFace := text.NewGoXFace(bitmapfont.Face)
+
+	f, err := os.Open(filepath.Join("testdata", "Roboto-Regular.ttf"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer func() {
+		_ = f.Close()
+	}()
+	fs, err := text.NewGoTextFaceSource(bufio.NewReader(f))
+	if err != nil {
+		t.Fatal(err)
+	}
+	goTextFace := &text.GoTextFace{
+		Source: fs,
+		Size:   32,
+	}
+
+	for _, tc := range []struct {
+		name string
+		face text.Face
+	}{
+		{
+			name: "GoXFace",
+			face: goxFace,
+		},
+		{
+			name: "GoTextFace",
+			face: goTextFace,
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			var glyphs []text.Glyph
+			glyphs = text.AppendGlyphs(glyphs, "a\x80b", tc.face, nil)
+			if len(glyphs) != 3 {
+				t.Fatalf("got: %d, want: 3", len(glyphs))
+			}
+			if got, want := glyphs[0].StartIndexInBytes, 0; got != want {
+				t.Errorf("got: %d, want: %d", got, want)
+			}
+			if got, want := glyphs[0].EndIndexInBytes, 1; got != want {
+				t.Errorf("got: %d, want: %d", got, want)
+			}
+			if got, want := glyphs[1].StartIndexInBytes, 1; got != want {
+				t.Errorf("got: %d, want: %d", got, want)
+			}
+			if got, want := glyphs[1].EndIndexInBytes, 2; got != want {
+				t.Errorf("got: %d, want: %d", got, want)
+			}
+			if got, want := glyphs[2].StartIndexInBytes, 2; got != want {
+				t.Errorf("got: %d, want: %d", got, want)
+			}
+			if got, want := glyphs[2].EndIndexInBytes, 3; got != want {
+				t.Errorf("got: %d, want: %d", got, want)
+			}
+		})
 	}
 }
